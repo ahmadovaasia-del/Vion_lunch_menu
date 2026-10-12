@@ -7,6 +7,9 @@ import { summarize, type Choice } from "@/lib/orders";
 import type { Department, Employee } from "@/lib/types";
 import { ChoicePicker } from "@/components/choice-picker";
 import { SummaryTable } from "@/components/summary-table";
+import { getSettings } from "@/lib/settings";
+import { fmt } from "@/i18n/dictionaries";
+import { SendSummaryButton } from "./send-button";
 
 type OrderRow = Choice & { employee_id: string };
 type ChangeRow = { employee_id: string; old_value: string | null; new_value: string | null; changed_by: string | null; changed_at: string };
@@ -18,13 +21,17 @@ export default async function DayPage({ searchParams }: PageProps<"/admin/day">)
   const date = isValidDate(dateParam) ? dateParam : today;
 
   const db = createAdminClient();
-  const [{ data: menu }, { data: orders }, { data: employees }, { data: departments }, { data: changes }] = await Promise.all([
+  const [{ data: menu }, { data: orders }, { data: employees }, { data: departments }, { data: changes }, { data: dispatch }, settings] = await Promise.all([
     db.from("menu_days").select("*").eq("date", date).maybeSingle<MenuDay>(),
     db.from("orders").select("employee_id, variant, portion").eq("date", date).returns<OrderRow[]>(),
     db.from("employees").select("*").order("full_name").returns<Employee[]>(),
     db.from("departments").select("id, name").order("name").returns<Department[]>(),
     db.from("order_changes").select("*").eq("date", date).order("changed_at", { ascending: false }).returns<ChangeRow[]>(),
+    db.from("daily_dispatches").select("sent_at, recipients").eq("date", date).maybeSingle<{ sent_at: string; recipients: string[] }>(),
+    getSettings(),
   ]);
+  const timeFmt = (iso: string) =>
+    new Date(iso).toLocaleTimeString(locale === "ro" ? "ro-MD" : "ru-RU", { timeZone: "Europe/Chisinau", hour: "2-digit", minute: "2-digit" });
 
   const orderBy = new Map((orders ?? []).map((o) => [o.employee_id, { variant: o.variant, portion: o.portion }]));
   const allEmployees = employees ?? [];
@@ -60,6 +67,14 @@ export default async function DayPage({ searchParams }: PageProps<"/admin/day">)
               {t.menu.soup}: {dishName(menu, "soup", locale)} · A: {dishName(menu, "main_a", locale)} · B: {dishName(menu, "main_b", locale)}
             </p>
             <SummaryTable t={t.day} s={summary} />
+            <div className="flex flex-col gap-2 border-t border-border px-4 py-3 text-sm">
+              <p className={dispatch ? "text-accent" : "text-muted"}>
+                {dispatch
+                  ? fmt(t.day.dispatchSent, { time: timeFmt(dispatch.sent_at), to: dispatch.recipients.join(", ") })
+                  : fmt(t.day.dispatchNotSent, { time: settings.send_time.slice(0, 5) })}
+              </p>
+              <SendSummaryButton t={t.day} date={date} alreadySent={!!dispatch} />
+            </div>
           </section>
 
           <section className="flex flex-col gap-3">
@@ -94,7 +109,7 @@ export default async function DayPage({ searchParams }: PageProps<"/admin/day">)
               <ul className="flex flex-col gap-1 text-sm">
                 {changes.map((c, i) => (
                   <li key={i} className="text-muted">
-                    {new Date(c.changed_at).toLocaleTimeString(locale === "ro" ? "ro-MD" : "ru-RU", { timeZone: "Europe/Chisinau", hour: "2-digit", minute: "2-digit" })}
+                    {timeFmt(c.changed_at)}
                     {" · "}
                     <span className="text-foreground">{nameOf.get(c.employee_id)}</span>: {c.old_value ?? "—"} → {c.new_value ?? "—"}
                     {c.changed_by && ` (${nameOf.get(c.changed_by)})`}

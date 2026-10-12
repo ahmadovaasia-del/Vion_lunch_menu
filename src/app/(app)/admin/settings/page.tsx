@@ -2,12 +2,16 @@ import { createAdminClient } from "@/lib/supabase/server";
 import { getDict } from "@/i18n/server";
 import { chisinauNow, formatDay } from "@/lib/dates";
 import { priceOn, type Price } from "@/lib/menu";
-import { DeletePriceButton, PriceForm } from "./forms";
+import { getSettings } from "@/lib/settings";
+import { DeletePriceButton, DispatchSettingsForm, PriceForm } from "./forms";
 
 export default async function SettingsPage() {
   const { locale, t } = await getDict();
   const db = createAdminClient();
-  const { data } = await db.from("prices").select("*").order("valid_from", { ascending: false }).returns<Price[]>();
+  const [{ data }, settings] = await Promise.all([
+    db.from("prices").select("*").order("valid_from", { ascending: false }).returns<Price[]>(),
+    getSettings(),
+  ]);
   const prices = data ?? [];
   const today = chisinauNow().date;
   const current = priceOn(prices, today);
@@ -48,6 +52,11 @@ export default async function SettingsPage() {
           </table>
         )}
         <PriceForm t={t} today={today} />
+      </section>
+
+      <section className="card flex flex-col gap-3">
+        <h2 className="font-semibold">{t.settings.dispatch}</h2>
+        <DispatchSettingsForm t={t} settings={settings} />
       </section>
     </div>
   );
