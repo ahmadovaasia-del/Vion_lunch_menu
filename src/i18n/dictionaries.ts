@@ -1,0 +1,156 @@
+export const LOCALES = ["ru", "ro"] as const;
+export type Locale = (typeof LOCALES)[number];
+export const DEFAULT_LOCALE: Locale = "ru";
+
+const ru = {
+  appName: "Обеды",
+  nav: {
+    myLunches: "Мои обеды",
+    history: "История",
+    admin: "Админ",
+    employees: "Сотрудники",
+    menu: "Меню",
+    today: "Сегодня",
+    report: "Отчёт",
+    settings: "Настройки",
+    logout: "Выйти",
+  },
+  login: {
+    title: "Вход",
+    emailLabel: "Ваш e-mail",
+    sendCode: "Получить код",
+    codeSent: "Мы отправили код и ссылку для входа на",
+    codeLabel: "Код из письма",
+    verify: "Войти",
+    otherEmail: "Другой e-mail",
+    unknownEmail: "Этот e-mail не найден среди активных сотрудников. Обратитесь к администратору.",
+    invalidCode: "Неверный или просроченный код.",
+    sendFailed: "Не удалось отправить письмо. Попробуйте через минуту.",
+    linkFailed: "Ссылка недействительна или устарела. Запросите новый код.",
+  },
+  common: {
+    save: "Сохранить",
+    cancel: "Отмена",
+    edit: "Изменить",
+    add: "Добавить",
+    saved: "Сохранено",
+    yes: "Да",
+    no: "Нет",
+    noAccess: "Нет доступа",
+    error: "Ошибка",
+  },
+  employees: {
+    title: "Сотрудники",
+    fullName: "Имя и фамилия",
+    email: "E-mail",
+    phone: "Телефон",
+    department: "Отдел",
+    noDepartment: "— без отдела —",
+    role: "Роль",
+    roleEmployee: "Сотрудник",
+    roleAdmin: "Администратор",
+    active: "Активен",
+    inactive: "Неактивен",
+    add: "Добавить сотрудника",
+    newDepartment: "Новый отдел",
+    addDepartment: "Добавить отдел",
+    importTitle: "Импорт из Excel",
+    importHint:
+      "Столбцы: Имя, E-mail, Телефон, Отдел, Активен (да/нет). Первая строка — заголовки. Сотрудники ищутся по e-mail: существующие обновляются, новые добавляются.",
+    importButton: "Загрузить",
+    importResult: "Добавлено: {created}, обновлено: {updated}, пропущено: {skipped}",
+    emailTaken: "Сотрудник с таким e-mail уже есть",
+    cannotDeactivateSelf: "Нельзя отключить или понизить самого себя",
+    count: "Всего: {total}, активных: {active}",
+    language: "Язык",
+    missing_columns: "В файле не найдены столбцы «Имя» и «E-mail»",
+    no_file: "Выберите файл .xlsx",
+    bad_file: "Не удалось прочитать файл. Нужен формат .xlsx",
+    file_too_large: "Файл больше 5 МБ",
+  },
+  home: {
+    hello: "Здравствуйте, {name}!",
+    comingSoon: "Выбор обедов появится на следующем этапе.",
+  },
+};
+
+export type Dictionary = typeof ru;
+
+const ro: Dictionary = {
+  appName: "Prânzuri",
+  nav: {
+    myLunches: "Prânzurile mele",
+    history: "Istoric",
+    admin: "Admin",
+    employees: "Angajați",
+    menu: "Meniu",
+    today: "Azi",
+    report: "Raport",
+    settings: "Setări",
+    logout: "Ieșire",
+  },
+  login: {
+    title: "Autentificare",
+    emailLabel: "E-mailul dvs.",
+    sendCode: "Primește codul",
+    codeSent: "Am trimis codul și linkul de autentificare la",
+    codeLabel: "Codul din e-mail",
+    verify: "Intră",
+    otherEmail: "Alt e-mail",
+    unknownEmail: "Acest e-mail nu figurează printre angajații activi. Adresați-vă administratorului.",
+    invalidCode: "Cod greșit sau expirat.",
+    sendFailed: "Nu s-a putut trimite e-mailul. Încercați peste un minut.",
+    linkFailed: "Linkul este invalid sau expirat. Solicitați un cod nou.",
+  },
+  common: {
+    save: "Salvează",
+    cancel: "Anulează",
+    edit: "Modifică",
+    add: "Adaugă",
+    saved: "Salvat",
+    yes: "Da",
+    no: "Nu",
+    noAccess: "Acces interzis",
+    error: "Eroare",
+  },
+  employees: {
+    title: "Angajați",
+    fullName: "Nume și prenume",
+    email: "E-mail",
+    phone: "Telefon",
+    department: "Departament",
+    noDepartment: "— fără departament —",
+    role: "Rol",
+    roleEmployee: "Angajat",
+    roleAdmin: "Administrator",
+    active: "Activ",
+    inactive: "Inactiv",
+    add: "Adaugă angajat",
+    newDepartment: "Departament nou",
+    addDepartment: "Adaugă departament",
+    importTitle: "Import din Excel",
+    importHint:
+      "Coloane: Nume, E-mail, Telefon, Departament, Activ (da/nu). Primul rând — antetele. Angajații se identifică după e-mail: cei existenți se actualizează, cei noi se adaugă.",
+    importButton: "Încarcă",
+    importResult: "Adăugați: {created}, actualizați: {updated}, omiși: {skipped}",
+    emailTaken: "Există deja un angajat cu acest e-mail",
+    cannotDeactivateSelf: "Nu vă puteți dezactiva sau retrograda pe dvs.",
+    count: "Total: {total}, activi: {active}",
+    language: "Limba",
+    missing_columns: "În fișier lipsesc coloanele «Nume» și «E-mail»",
+    no_file: "Alegeți un fișier .xlsx",
+    bad_file: "Fișierul nu a putut fi citit. Este necesar formatul .xlsx",
+    file_too_large: "Fișierul depășește 5 MB",
+  },
+  home: {
+    hello: "Bună ziua, {name}!",
+    comingSoon: "Alegerea prânzurilor va apărea la etapa următoare.",
+  },
+};
+
+export const dictionaries: Record<Locale, Dictionary> = { ru, ro };
+
+/** Подставляет {параметры} в строку. */
+export function fmt(template: string, params: Record<string, string | number>) {
+  return template.replace(/\{(\w+)\}/g, (_, k) => String(params[k] ?? `{${k}}`));
+}
