@@ -60,8 +60,7 @@ Next.js 16 · Supabase (Postgres + вход по коду из письма) · 
 ### 5. Деплой на Vercel
 
 1. Импортируйте репозиторий в Vercel (Framework: Next.js).
-2. Добавьте переменные окружения из `.env.example`
-   (`NEXT_PUBLIC_SITE_URL` — адрес сайта).
+2. Добавьте переменные окружения из `.env.example`.
 3. После первого деплоя укажите этот адрес в Supabase (Site URL) и в `supabase/cron.sql`.
 
 ### 6. Локальный запуск
