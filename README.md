@@ -12,20 +12,22 @@ Next.js 16 · Supabase (Postgres + вход по коду из письма) · 
 
 1. Создайте проект на <https://supabase.com> (регион — Frankfurt).
 2. **SQL Editor** → выполните по очереди файлы из `supabase/migrations/`.
-3. **Authentication → Sign In / Providers → Email**: включён; *Confirm email* — можно оставить.
-4. **Authentication → Emails → Templates → Magic Link** — замените текст письма,
-   чтобы в нём были и код, и ссылка:
+3. **Почта (SMTP)** — без неё Supabase не даёт менять текст писем и шлёт лишь пару писем в час.
+   Gmail: включите двухэтапную проверку, создайте пароль приложения
+   (<https://myaccount.google.com/apppasswords>), затем **Authentication → Emails → Set up SMTP**:
+   host `smtp.gmail.com`, port `465`, username и sender — адрес Gmail, password — пароль приложения без пробелов.
+4. **Authentication → Emails → Templates → Magic link or OTP** (вкладка *Source*):
 
    ```html
    <h2>Вход в «Обеды» / Prânzuri</h2>
-   <p>Код / Codul: <b style="font-size:24px">{{ .Token }}</b></p>
-   <p><a href="{{ .SiteURL }}/auth/confirm?token_hash={{ .TokenHash }}&type=email">Войти / Intră</a></p>
+   <p>Ваш код / Codul dvs.:</p>
+   <p style="font-size:28px;font-weight:bold;letter-spacing:4px">{{ .Token }}</p>
+   <p>Или нажмите / Sau apăsați: <a href="{{ .SiteURL }}/auth/confirm?token_hash={{ .TokenHash }}&type=email">Войти / Intră</a></p>
    ```
 
-5. **Authentication → URL Configuration → Site URL** — адрес сайта на Vercel.
-6. Встроенная почта Supabase отправляет лишь несколько писем в час. Для работы
-   подключите SMTP: **Authentication → Emails → SMTP Settings** (например, SMTP Resend:
-   host `smtp.resend.com`, port `465`, user `resend`, password — API-ключ Resend).
+   Ссылка ведёт на страницу с кнопкой «Войти»: почтовые сканеры (Outlook Safe Links)
+   открывают ссылки сами, и без кнопки одноразовая ссылка «сгорала» бы до клика.
+5. **Authentication → URL Configuration**: Site URL — адрес сайта; Redirect URLs — `адрес/**`.
 
 ### 2. Переменные окружения
 
@@ -35,11 +37,11 @@ Next.js 16 · Supabase (Postgres + вход по коду из письма) · 
 `BOOTSTRAP_ADMIN_EMAIL` — e-mail первого администратора: при первом входе
 он создаётся автоматически. Остальных сотрудников добавляет администратор.
 
-### 3. Почта для сводки (Resend)
+### 3. Почта для сводки
 
-1. Зарегистрируйтесь на <https://resend.com>, добавьте и подтвердите домен компании
-   (без подтверждённого домена Resend отправляет письма только на ваш собственный адрес).
-2. Создайте API-ключ → `RESEND_API_KEY`; `MAIL_FROM` — адрес на этом домене.
+Сводка уходит через тот же SMTP: заполните `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`,
+`SMTP_PASS`, `MAIL_FROM` в `.env.local` (и на Vercel). Позже можно перейти на почту
+домена компании (Microsoft 365 или Resend) — меняются только эти переменные.
 
 ### 4. Автоматическая отправка в 9:30 (pg_cron)
 
