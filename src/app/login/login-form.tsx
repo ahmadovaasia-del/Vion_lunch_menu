@@ -19,6 +19,7 @@ export function LoginForm({ t }: { t: Dictionary["login"] }) {
   if (!email) {
     return (
       <form
+        key="email"
         action={(fd) => {
           setEditingEmail(false);
           sendAction(fd);
@@ -34,7 +35,7 @@ export function LoginForm({ t }: { t: Dictionary["login"] }) {
   }
 
   return (
-    <form action={verifyAction} className="flex flex-col gap-3">
+    <form key="code" action={verifyAction} className="flex flex-col gap-3">
       <p className="text-sm text-muted">
         {t.codeSent} <b>{email}</b>
       </p>
