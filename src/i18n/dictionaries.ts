@@ -19,7 +19,7 @@ const ru = {
     title: "Вход",
     emailLabel: "Ваш e-mail",
     sendCode: "Получить код",
-    codeSent: "Откройте письмо и нажмите ссылку для входа (или введите код из письма). Письмо отправлено на",
+    codeSent: "Мы отправили код и ссылку для входа на",
     codeLabel: "Код из письма",
     verify: "Войти",
     otherEmail: "Другой e-mail",
@@ -27,6 +27,7 @@ const ru = {
     invalidCode: "Неверный или просроченный код.",
     sendFailed: "Не удалось отправить письмо. Попробуйте через минуту.",
     linkFailed: "Ссылка недействительна или устарела. Запросите новый код.",
+    confirmButton: "Войти в «Обеды»",
   },
   common: {
     save: "Сохранить",
@@ -208,7 +209,7 @@ const ro: Dictionary = {
     title: "Autentificare",
     emailLabel: "E-mailul dvs.",
     sendCode: "Primește codul",
-    codeSent: "Deschideți e-mailul și apăsați linkul de autentificare (sau introduceți codul). E-mailul a fost trimis la",
+    codeSent: "Am trimis codul și linkul de autentificare la",
     codeLabel: "Codul din e-mail",
     verify: "Intră",
     otherEmail: "Alt e-mail",
@@ -216,6 +217,7 @@ const ro: Dictionary = {
     invalidCode: "Cod greșit sau expirat.",
     sendFailed: "Nu s-a putut trimite e-mailul. Încercați peste un minut.",
     linkFailed: "Linkul este invalid sau expirat. Solicitați un cod nou.",
+    confirmButton: "Intră în «Prânzuri»",
   },
   common: {
     save: "Salvează",

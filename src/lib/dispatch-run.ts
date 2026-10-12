@@ -1,6 +1,6 @@
 import "server-only";
-import { Resend } from "resend";
 import { createAdminClient } from "@/lib/supabase/server";
+import { sendMail } from "@/lib/mail";
 import { getSettings } from "@/lib/settings";
 import { chisinauNow } from "@/lib/dates";
 import { buildSummaryEmail, isDispatchDue, resolveRecipients } from "@/lib/dispatch";
@@ -52,19 +52,13 @@ export async function runDailyDispatch({ date, force = false }: { date?: string;
   }
 
   const mail = buildSummaryEmail(day, menu, summary);
-  const { error: sendError } = await new Resend(process.env.RESEND_API_KEY).emails.send({
-    from: process.env.MAIL_FROM!,
-    to: recipients.to,
-    cc: recipients.cc.length ? recipients.cc : undefined,
-    subject: mail.subject,
-    html: mail.html,
-    text: mail.text,
-  });
-  if (sendError) {
+  try {
+    await sendMail({ to: recipients.to, cc: recipients.cc, ...mail });
+  } catch (sendError) {
     // Освобождаем день, чтобы следующий запуск cron'а попробовал снова.
     await db.from("daily_dispatches").delete().eq("date", day);
     console.error("daily dispatch send failed", sendError);
-    return { status: "send_failed", date: day, error: sendError.message };
+    return { status: "send_failed", date: day, error: sendError instanceof Error ? sendError.message : String(sendError) };
   }
   return { status: "sent", date: day };
 }
