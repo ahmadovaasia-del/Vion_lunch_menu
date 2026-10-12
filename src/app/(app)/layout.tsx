@@ -11,7 +11,11 @@ export default async function AppLayout({ children }: LayoutProps<"/">) {
   const links = [
     { href: "/", label: t.nav.myLunches },
     ...(me.role === "admin"
-      ? [{ href: "/admin/employees", label: t.nav.employees }]
+      ? [
+          { href: "/admin/menu", label: t.nav.menu },
+          { href: "/admin/employees", label: t.nav.employees },
+          { href: "/admin/settings", label: t.nav.settings },
+        ]
       : []),
   ];
 

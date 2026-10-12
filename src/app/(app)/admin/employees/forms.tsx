@@ -1,6 +1,7 @@
 "use client";
 
 import { useActionState } from "react";
+import { useFormAction } from "@/components/use-form-action";
 import { fmt, type Dictionary } from "@/i18n/dictionaries";
 import type { Department, Employee } from "@/lib/types";
 import { addDepartment, importEmployees, saveEmployee } from "./actions";
@@ -21,9 +22,9 @@ export function EmployeeForm({
   employee?: Employee;
   isSelf?: boolean;
 }) {
-  const [state, action, pending] = useActionState(saveEmployee, null);
+  const [state, onSubmit, pending] = useFormAction(saveEmployee, (r) => r.ok && !employee);
   return (
-    <form action={action} className="grid gap-3 sm:grid-cols-2">
+    <form onSubmit={onSubmit} className="grid gap-3 sm:grid-cols-2">
       {employee && <input type="hidden" name="id" value={employee.id} />}
       <label className="flex flex-col gap-1">
         <span className="label">{t.employees.fullName}</span>

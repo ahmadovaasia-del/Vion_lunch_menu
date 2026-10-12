@@ -44,16 +44,20 @@ create table prices (
 );
 
 -- Меню на день. День с меню = рабочий день, на который можно заказывать.
+-- Название блюда обязательно хотя бы на одном языке.
 create table menu_days (
   date       date primary key,
-  soup_ru    text not null,
+  soup_ru    text,
   soup_ro    text,
-  main_a_ru  text not null,
+  main_a_ru  text,
   main_a_ro  text,
-  main_b_ru  text not null,
+  main_b_ru  text,
   main_b_ro  text,
   created_at timestamptz not null default now(),
-  updated_at timestamptz not null default now()
+  updated_at timestamptz not null default now(),
+  check (coalesce(soup_ru, soup_ro) is not null),
+  check (coalesce(main_a_ru, main_a_ro) is not null),
+  check (coalesce(main_b_ru, main_b_ro) is not null)
 );
 
 -- Заказ сотрудника на день. «Не заказываю» = строки нет.
