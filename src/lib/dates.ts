@@ -70,3 +70,18 @@ export function isOrderOpen(date: string, cutoffTime: string, now: Date = new Da
 export function formatDay(date: string, locale: "ru" | "ro", opts: Intl.DateTimeFormatOptions = { weekday: "long", day: "numeric", month: "long" }) {
   return new Intl.DateTimeFormat(locale === "ro" ? "ro-MD" : "ru-RU", { ...opts, timeZone: "UTC" }).format(toUtc(date));
 }
+
+/** 'YYYY-MM' ± n месяцев */
+export function addMonths(month: string, n: number): string {
+  const d = toUtc(`${month}-01`);
+  d.setUTCMonth(d.getUTCMonth() + n);
+  return fromUtc(d).slice(0, 7);
+}
+
+export function isValidMonth(value: unknown): value is string {
+  return typeof value === "string" && /^\d{4}-(0[1-9]|1[0-2])$/.test(value);
+}
+
+export function formatMonth(month: string, locale: "ru" | "ro") {
+  return formatDay(`${month}-01`, locale, { month: "long", year: "numeric" });
+}

@@ -51,3 +51,13 @@ describe("календарь", () => {
     expect(isValidDate("12.10.2026")).toBe(false);
   });
 });
+
+describe("месяцы", () => {
+  it("addMonths через границу года", async () => {
+    const { addMonths, isValidMonth } = await import("@/lib/dates");
+    expect(addMonths("2026-12", 1)).toBe("2027-01");
+    expect(addMonths("2026-01", -1)).toBe("2025-12");
+    expect(isValidMonth("2026-13")).toBe(false);
+    expect(isValidMonth("2026-10")).toBe(true);
+  });
+});

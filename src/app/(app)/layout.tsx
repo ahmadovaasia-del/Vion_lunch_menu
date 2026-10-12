@@ -12,6 +12,7 @@ export default async function AppLayout({ children }: LayoutProps<"/">) {
     { href: "/", label: t.nav.myLunches },
     ...(me.role === "admin"
       ? [
+          { href: "/admin/day", label: t.nav.today },
           { href: "/admin/menu", label: t.nav.menu },
           { href: "/admin/employees", label: t.nav.employees },
           { href: "/admin/settings", label: t.nav.settings },
