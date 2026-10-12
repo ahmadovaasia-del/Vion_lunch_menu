@@ -9,7 +9,8 @@ export async function sendMail(msg: { to: string[]; cc?: string[]; subject: stri
     host: process.env.SMTP_HOST,
     port,
     secure: port === 465,
-    auth: { user: process.env.SMTP_USER, pass: process.env.SMTP_PASS },
+    // Пароль приложения Google часто копируют с пробелами — убираем их.
+    auth: { user: process.env.SMTP_USER, pass: process.env.SMTP_PASS?.replace(/s/g, "") },
   });
   await transport.sendMail({
     from: process.env.MAIL_FROM || process.env.SMTP_USER,
